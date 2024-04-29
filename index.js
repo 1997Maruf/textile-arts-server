@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app =express();
 const port = process.env.PORT || 5000;
 
@@ -42,32 +42,26 @@ app.get('/craft', async(req, res)=>{
     res.send(result)
 })
 
+app.get('/craft/:id', async(req, res) =>{
+    const id =req.params.id;
+})
+
 app.post('/craft', async (req, res)=>{
     const newCraft = req.body;
     console.log(newCraft)
     const result = await craftCollection.insertOne(newCraft);
     res.send(result);
+
 })
 
-app.get("/MyArtCraftList/:email", async (req, res) =>{
-    console.log(req.params.email);
-    const result = await craftCollection.find({email:req.params.email}).toArray();
-    res.send(result);
-})
-app.delete('/craft/:id', async (req, res) =>{
+app.delete('/craft/:id', async(req, res) => {
     const id = req.params.id;
-    const query = {_id: new Object(id)}
+    const query = {_id: new ObjectId(id)}
     const result = await craftCollection.deleteOne(query);
     res.send(result);
-
 })
-app.get('/craft/:id', async (req, res) =>{
-    const id = req.params.id;
-    const query = {_id: new Object(id)}
-    const result = await craftCollection.findOne(query);
-    res.send(result);
 
-})
+
 
 
 
